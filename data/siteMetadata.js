@@ -3,9 +3,9 @@ const siteMetadata = {
   title: 'Feziv Blog',
   author: 'Ivan Cheremisin',
   headerTitle: 'Feziv',
-  description: 'A blog created with Next.js and Tailwind.css',
+  description: 'blog, some notes, some thoughts',
   language: 'en-us',
-  theme: 'system', // system, dark or light
+  theme: 'light', // system, dark or light
   siteUrl: 'https://me.feziv.ru',
   siteRepo: 'https://github.com/fess932/blog',
   siteLogo: '/static/images/logo.png',
