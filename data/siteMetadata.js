@@ -9,7 +9,7 @@ const siteMetadata = {
   siteUrl: 'https://me.feziv.ru',
   siteRepo: 'https://github.com/fess932/blog',
   siteLogo: '/static/images/logo.png',
-  socialBanner: '/static/images/twitter-card.png',
+  socialBanner: '/static/images/avatar2.png',
   mastodon: 'https://mastodon.social/@fess932',
   email: 'fess932@gmail.com',
   github: 'https://github.com/fess932',
