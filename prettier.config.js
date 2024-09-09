@@ -1,3 +1,5 @@
+const eslintPluginPrettierRecommended = require('eslint-plugin-prettier/recommended')
+
 module.exports = {
   semi: false,
   singleQuote: true,
@@ -7,4 +9,5 @@ module.exports = {
   trailingComma: 'es5',
   bracketSpacing: true,
   plugins: ['prettier-plugin-tailwindcss'],
+  eslintPluginPrettierRecommended,
 }
