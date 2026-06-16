@@ -1,15 +1,20 @@
 #!/usr/bin/env bun
-// Scaffold a new blog post: `bun run new "My Post Title"`
-// Creates src/content/blog/YYYY-MM-DD-<slug>.md with today's date prefilled.
+// @ts-nocheck — standalone Bun glue script (run, not part of the site type-check)
+// Scaffold a new blog post: `bun run new "My Post Title" [--mdx]`
+// Creates src/content/blog/YYYY-MM-DD-<slug>.{md,mdx} with today's date prefilled.
+// Use --mdx for hand-authored posts (components/JSX) — the Anytype sync only
+// ever writes .md, so .mdx files are never overwritten.
 
 import { existsSync } from 'node:fs'
 import { mkdir, writeFile } from 'node:fs/promises'
 import { join } from 'node:path'
 
-const title = process.argv.slice(2).join(' ').trim()
+const args = process.argv.slice(2)
+const useMdx = args.includes('--mdx')
+const title = args.filter((a) => !a.startsWith('--')).join(' ').trim()
 
 if (!title) {
-  console.error('Usage: bun run new "My Post Title"')
+  console.error('Usage: bun run new "My Post Title" [--mdx]')
   process.exit(1)
 }
 
@@ -22,7 +27,7 @@ const slug = title
 
 const date = new Date().toISOString().slice(0, 10) // YYYY-MM-DD
 const dir = join('src', 'content', 'blog')
-const filePath = join(dir, `${date}-${slug}.md`)
+const filePath = join(dir, `${date}-${slug}.${useMdx ? 'mdx' : 'md'}`)
 
 if (existsSync(filePath)) {
   console.error(`✗ Already exists: ${filePath}`)

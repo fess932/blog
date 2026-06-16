@@ -7,12 +7,15 @@
   },
   "scripts": {
     "dev": "astro dev",
-    "build": "astro build",
+    "build": "bun run scripts/sync-anytype.ts && astro build",
+    "deploy": "astro build",
     "preview": "astro preview",
     "new": "bun run scripts/new-post.ts",
+    "sync:anytype": "bun run scripts/sync-anytype.ts",
     "astro": "astro"
   },
   "dependencies": {
+    "@astrojs/markdown-remark": "^7.2.0",
     "@astrojs/mdx": "^6.0.3",
     "@astrojs/rss": "^4.0.18",
     "@astrojs/sitemap": "^3.7.3",
