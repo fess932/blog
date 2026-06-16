@@ -55,6 +55,58 @@ body {
 .prose ol {
   @apply list-decimal space-y-2 pl-6;
 }
+/* GFM task lists: `- [ ]` / `- [x]` */
+.prose ul.contains-task-list {
+  @apply list-none pl-0;
+}
+/* nested task lists keep their own line + indent */
+.prose ul.contains-task-list ul.contains-task-list {
+  @apply mt-2 pl-7;
+}
+.prose .task-list-item {
+  @apply leading-relaxed;
+}
+/* custom checkbox */
+.prose .task-list-item > input[type='checkbox'] {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 1.15em;
+  height: 1.15em;
+  margin: 0 0.6em 0 0;
+  vertical-align: -0.22em;
+  border: 1.5px solid var(--color-zinc-300);
+  border-radius: 0.4em;
+  background: transparent;
+  position: relative;
+  transition:
+    background-color 0.15s ease,
+    border-color 0.15s ease;
+}
+.dark .prose .task-list-item > input[type='checkbox'] {
+  border-color: var(--color-zinc-600);
+}
+.prose .task-list-item > input[type='checkbox']:checked {
+  background-color: var(--color-emerald-600);
+  border-color: var(--color-emerald-600);
+}
+.dark .prose .task-list-item > input[type='checkbox']:checked {
+  background-color: var(--color-emerald-400);
+  border-color: var(--color-emerald-400);
+}
+.prose .task-list-item > input[type='checkbox']:checked::after {
+  content: '';
+  position: absolute;
+  left: 0.36em;
+  top: 0.13em;
+  width: 0.3em;
+  height: 0.55em;
+  border: solid #fff;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+}
+.dark .prose .task-list-item > input[type='checkbox']:checked::after {
+  border-color: var(--color-zinc-950);
+}
 .prose blockquote {
   @apply border-l-4 border-emerald-500/50 pl-4 text-zinc-500 italic dark:text-zinc-400;
 }
