@@ -7,13 +7,13 @@ Some of the rational fiction I love (inspiration from
   - [Significant Digits](https://www.anarchyishyperbole.com/p/significant-digits.html)
 - [Worm](https://parahumans.wordpress.com/)
 - [Mother of Learning](https://www.royalroad.com/fiction/21220/mother-of-learning)
+- [Worth the сandle](https://www.royalroad.com/fiction/25137/worth-the-candle)
+- [The Stormlight Archive](https://www.brandonsanderson.com/pages/the-stormlight-archive-series)
 
 ### Todo
-
 - Ward
 - A Practical Guide to Evil
 - The Wandering Inn
-- Worth the сandle
 - Malazan Book of the Fallen
 - Pact
 - Pale
