@@ -1,0 +1,30 @@
+---
+title: Netfilter
+description: About Netfilter
+pubDate: '2024-04-24'
+tags: ['networks']
+---
+
+Old iptables backend and new nftables backend
+![a](https://res.cloudinary.com/dvrzuu1gp/image/upload/v1713905037/zvktb5rn90qil6n6hjoh.png)
+
+Configuring tables \
+https://wiki.nftables.org/wiki-nftables/index.php/Configuring_tables
+
+List all rules \
+`nft list ruleset` \
+Reset all rules \
+`nft flush ruleset` \
+Delete some table \
+`nft delete table ip ip_filter`
+
+Rule sets can be annonymouse and named \
+https://wiki.nftables.org/wiki-nftables/index.php/Sets
+
+example usage [golang lib from google](https://github.com/google/nftables) for managing nft backend \
+https://tomdnetto.net/post/advanced_nftables_with_go
+
+### todo
+
+- how use [netfilter](https://github.com/ti-mo/netfilter) without nftables backend?
+- how use eBPF for firewall without netfilter?
