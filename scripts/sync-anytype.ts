@@ -24,7 +24,7 @@
  */
 
 import { existsSync, readdirSync } from "node:fs";
-import { mkdir, writeFile } from "node:fs/promises";
+import { mkdir, unlink, writeFile } from "node:fs/promises";
 import { join } from "node:path";
 
 // ---------------------------------------------------------------- config
@@ -260,6 +260,9 @@ async function main() {
     ? readdirSync(OUT_DIR).filter((f) => f.endsWith(".mdx"))
     : [];
 
+  // Track slugs that exist in Anytype so we can delete orphaned .md afterwards.
+  const syncedSlugs = new Set();
+
   for (const obj of objects) {
     const title = String(obj.name ?? prop(obj, "name") ?? "").trim();
     const date = toISODate(prop(obj, REL.date));
@@ -273,6 +276,7 @@ async function main() {
       continue;
     }
     const slug = (prop(obj, REL.slug) as string) || slugify(title) || obj.id;
+    syncedSlugs.add(slug);
 
     // Skip if a hand-written .mdx already owns this slug (date prefix ignored).
     if (handwritten.some((f) => f.replace(/^\d{4}-\d{2}-\d{2}-/, "") === `${slug}.mdx`)) {
@@ -305,6 +309,23 @@ async function main() {
       console.log(`✓ ${file}`);
     }
   }
+
+  // Delete synced .md whose slug no longer exists in Anytype. Only `.md` is
+  // touched — hand-authored `.mdx` posts are always left alone.
+  const existingMd = existsSync(OUT_DIR)
+    ? readdirSync(OUT_DIR).filter((f) => f.endsWith(".md"))
+    : [];
+  for (const f of existingMd) {
+    const slug = f.replace(/\.md$/, "").replace(/^\d{4}-\d{2}-\d{2}-/, "");
+    if (syncedSlugs.has(slug)) continue;
+    if (DRY) {
+      console.log(`✗ would delete ${f} (not in Anytype)`);
+    } else {
+      await unlink(join(OUT_DIR, f));
+      console.log(`✗ deleted ${f} (not in Anytype)`);
+    }
+  }
+
   console.log("Done.");
 }
 

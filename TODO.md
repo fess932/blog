@@ -13,13 +13,9 @@ Deferred enhancements / ideas (not blocking).
 
 ## Sync (Anytype)
 
-- [ ] **Deletion sync** — when a post is deleted in Anytype, remove the matching
-      synced `.md` too (only `.md`, never `.mdx`). Likely: collect slugs present in
-      Anytype this run, then delete `src/content/blog/*.md` whose slug isn't in that
-      set.
-      ⚠️ DO NOT implement until all existing git posts (netfilter, srbija, axfr) are
-      migrated into Anytype — otherwise the sync would delete posts that don't exist
-      in Anytype yet.
+- [x] **Deletion sync** — `bun run sync:anytype` deletes synced `.md` whose slug is
+      no longer in Anytype (only `.md`; `.mdx` are always left alone). Old posts
+      (netfilter, srbija, axfr) were moved to `.mdx`, so they're safe.
 
 ## Search
 
