@@ -1,0 +1,44 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro'
+import SocialIcons from '../components/SocialIcons.astro'
+import { AUTHOR } from '../consts'
+---
+
+<BaseLayout title="About" description="About Ivan Cheremisin.">
+  <div class="flex flex-col items-start gap-6 sm:flex-row sm:items-center">
+    <img
+      src={AUTHOR.avatar}
+      alt={AUTHOR.name}
+      class="h-24 w-24 rounded-full border border-zinc-200 object-cover dark:border-zinc-800"
+    />
+    <div>
+      <h1 class="text-3xl font-bold tracking-tight text-zinc-900 dark:text-zinc-100">
+        {AUTHOR.name}
+      </h1>
+      <p class="mt-1 text-zinc-600 dark:text-zinc-400">{AUTHOR.occupation}</p>
+      <div class="mt-3">
+        <SocialIcons />
+      </div>
+    </div>
+  </div>
+
+  <div class="prose mt-10">
+    <p>
+      I'm a software developer (I prefer backend — Go, some Rust) who loves video games and
+      rationality fiction.
+    </p>
+    <p>I mostly build small systems-y things and tools. A few of them live on the
+      <a href="/projects">projects</a> page.</p>
+
+    <h2>Setup &amp; links</h2>
+    <ul>
+      <li>Images hosted on <a href="https://cloudinary.com/">Cloudinary</a></li>
+      <li>Good background music: <a href="https://www.lofi.cafe/">lofi.cafe</a></li>
+      <li>
+        Reading list inspiration: <a href="https://www.goodreads.com/list/show/100705.Rational_Fiction">
+          Rational Fiction</a
+        >
+      </li>
+    </ul>
+  </div>
+</BaseLayout>

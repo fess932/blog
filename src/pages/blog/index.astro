@@ -1,0 +1,17 @@
+---
+import { getCollection } from 'astro:content'
+import BaseLayout from '../../layouts/BaseLayout.astro'
+import PostCard from '../../components/PostCard.astro'
+
+const posts = (await getCollection('blog'))
+  .filter((p) => !p.data.draft)
+  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
+---
+
+<BaseLayout title="Blog" description="All posts.">
+  <h1 class="text-3xl font-bold tracking-tight text-zinc-900 dark:text-zinc-100">Blog</h1>
+  <p class="mt-2 text-zinc-600 dark:text-zinc-400">{posts.length} posts</p>
+  <div class="mt-6 divide-y divide-zinc-200 dark:divide-zinc-800">
+    {posts.map((post) => <PostCard post={post} />)}
+  </div>
+</BaseLayout>

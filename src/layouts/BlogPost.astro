@@ -1,0 +1,60 @@
+---
+import type { CollectionEntry } from 'astro:content'
+import BaseLayout from './BaseLayout.astro'
+import FormattedDate from '../components/FormattedDate.astro'
+
+type Props = CollectionEntry<'blog'>['data']
+
+const { title, description, pubDate, updatedDate, tags, heroImage } = Astro.props
+---
+
+<BaseLayout title={title} description={description} image={heroImage}>
+  <article>
+    <header class="mb-8">
+      <div class="mb-3 flex flex-wrap items-center gap-2 text-sm text-zinc-500 dark:text-zinc-400">
+        <FormattedDate date={pubDate} />
+        {
+          updatedDate && (
+            <span class="italic">
+              · updated <FormattedDate date={updatedDate} />
+            </span>
+          )
+        }
+      </div>
+      <h1 class="text-3xl font-bold tracking-tight text-zinc-900 sm:text-4xl dark:text-zinc-100">
+        {title}
+      </h1>
+      {
+        tags.length > 0 && (
+          <div class="mt-4 flex flex-wrap gap-2">
+            {tags.map((tag) => (
+              <a
+                href={`/tags/${tag}`}
+                class="rounded-full bg-emerald-50 px-3 py-1 text-xs font-medium text-emerald-700 transition-colors hover:bg-emerald-100 dark:bg-emerald-500/10 dark:text-emerald-300 dark:hover:bg-emerald-500/20"
+              >
+                #{tag}
+              </a>
+            ))}
+          </div>
+        )
+      }
+    </header>
+    {
+      heroImage && (
+        <img src={heroImage} alt="" class="mb-8 w-full rounded-xl border border-zinc-200 dark:border-zinc-800" />
+      )
+    }
+    <div class="prose">
+      <slot />
+    </div>
+  </article>
+
+  <div class="mt-12 border-t border-zinc-200 pt-6 dark:border-zinc-800">
+    <a
+      href="/blog"
+      class="text-sm font-medium text-emerald-600 hover:text-emerald-700 dark:text-emerald-400"
+    >
+      ← Back to blog
+    </a>
+  </div>
+</BaseLayout>

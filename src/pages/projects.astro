@@ -1,0 +1,36 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro'
+import { projects } from '../data/projects'
+---
+
+<BaseLayout title="Projects" description="Things I have built.">
+  <h1 class="text-3xl font-bold tracking-tight text-zinc-900 dark:text-zinc-100">Projects</h1>
+  <p class="mt-2 text-zinc-600 dark:text-zinc-400">
+    Mostly backend and systems experiments — Go and Rust.
+  </p>
+
+  <div class="mt-8 grid gap-4 sm:grid-cols-2">
+    {
+      projects.map((project) => (
+        <a
+          href={project.href}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="group flex flex-col rounded-xl border border-zinc-200 p-5 transition-colors hover:border-emerald-500/50 dark:border-zinc-800 dark:hover:border-emerald-500/50"
+        >
+          <h2 class="font-mono font-semibold text-zinc-900 group-hover:text-emerald-600 dark:text-zinc-100 dark:group-hover:text-emerald-400">
+            {project.title}
+          </h2>
+          <p class="mt-2 flex-1 text-sm text-zinc-600 dark:text-zinc-400">{project.description}</p>
+          <div class="mt-4 flex flex-wrap gap-2">
+            {project.tags.map((tag) => (
+              <span class="rounded-full bg-zinc-100 px-2.5 py-0.5 text-xs font-medium text-zinc-600 dark:bg-zinc-800 dark:text-zinc-400">
+                {tag}
+              </span>
+            ))}
+          </div>
+        </a>
+      ))
+    }
+  </div>
+</BaseLayout>

@@ -1,0 +1,21 @@
+---
+import { AUTHOR, SITE_TITLE } from '../consts'
+import SocialIcons from './SocialIcons.astro'
+
+const year = new Date().getFullYear()
+---
+
+<footer class="mt-20 border-t border-zinc-200 dark:border-zinc-800">
+  <div
+    class="mx-auto flex max-w-3xl flex-col items-center gap-4 px-4 py-10 text-sm text-zinc-500 sm:px-6 dark:text-zinc-400"
+  >
+    <SocialIcons />
+    <p>
+      {AUTHOR.name} · © {year} · <a
+        href="/"
+        class="hover:text-emerald-600 dark:hover:text-emerald-400">{SITE_TITLE}</a
+      >
+    </p>
+    <p class="text-xs text-zinc-400 dark:text-zinc-600">Built with Astro · Bun</p>
+  </div>
+</footer>

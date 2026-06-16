@@ -1,0 +1,71 @@
+---
+import { getCollection } from 'astro:content'
+import BaseLayout from '../layouts/BaseLayout.astro'
+import PostCard from '../components/PostCard.astro'
+import SocialIcons from '../components/SocialIcons.astro'
+import { AUTHOR } from '../consts'
+import { projects } from '../data/projects'
+
+const posts = (await getCollection('blog'))
+  .filter((p) => !p.data.draft)
+  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
+
+const latest = posts.slice(0, 4)
+const featured = projects.slice(0, 4)
+---
+
+<BaseLayout>
+  <!-- Hero -->
+  <section class="border-b border-zinc-200 pb-12 dark:border-zinc-800">
+    <p class="font-mono text-sm text-emerald-600 dark:text-emerald-400">hello, world</p>
+    <h1 class="mt-2 text-4xl font-bold tracking-tight text-zinc-900 sm:text-5xl dark:text-zinc-100">
+      {AUTHOR.name}
+    </h1>
+    <p class="mt-3 text-lg text-zinc-600 dark:text-zinc-400">{AUTHOR.occupation}</p>
+    <p class="mt-4 max-w-2xl leading-relaxed text-zinc-600 dark:text-zinc-400">{AUTHOR.bio}</p>
+    <div class="mt-6">
+      <SocialIcons />
+    </div>
+  </section>
+
+  <!-- Latest posts -->
+  <section class="mt-12">
+    <div class="flex items-baseline justify-between">
+      <h2 class="text-2xl font-bold tracking-tight">Latest posts</h2>
+      <a href="/blog" class="text-sm font-medium text-emerald-600 hover:underline dark:text-emerald-400">
+        All posts →
+      </a>
+    </div>
+    <div class="mt-2 divide-y divide-zinc-200 dark:divide-zinc-800">
+      {latest.length === 0 && <p class="py-6 text-zinc-500">No posts yet.</p>}
+      {latest.map((post) => <PostCard post={post} />)}
+    </div>
+  </section>
+
+  <!-- Featured projects -->
+  <section class="mt-12">
+    <div class="flex items-baseline justify-between">
+      <h2 class="text-2xl font-bold tracking-tight">Projects</h2>
+      <a href="/projects" class="text-sm font-medium text-emerald-600 hover:underline dark:text-emerald-400">
+        All projects →
+      </a>
+    </div>
+    <div class="mt-4 grid gap-4 sm:grid-cols-2">
+      {
+        featured.map((project) => (
+          <a
+            href={project.href}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="group rounded-xl border border-zinc-200 p-5 transition-colors hover:border-emerald-500/50 dark:border-zinc-800 dark:hover:border-emerald-500/50"
+          >
+            <h3 class="font-mono font-semibold text-zinc-900 group-hover:text-emerald-600 dark:text-zinc-100 dark:group-hover:text-emerald-400">
+              {project.title}
+            </h3>
+            <p class="mt-2 text-sm text-zinc-600 dark:text-zinc-400">{project.description}</p>
+          </a>
+        ))
+      }
+    </div>
+  </section>
+</BaseLayout>
