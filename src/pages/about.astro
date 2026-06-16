@@ -2,6 +2,7 @@
 import BaseLayout from '../layouts/BaseLayout.astro'
 import SocialIcons from '../components/SocialIcons.astro'
 import { AUTHOR } from '../consts'
+import { Content as Books } from '../content/books.md'
 ---
 
 <BaseLayout title="About" description="About Ivan Cheremisin.">
@@ -55,12 +56,8 @@ import { AUTHOR } from '../consts'
           avatar generator</a
         >
       </li>
-      <li>
-        a list of books to read on <a href="/blog/books">/blog/books</a> · inspiration from
-        <a href="https://www.goodreads.com/list/show/100705.Rational_Fiction">Goodreads: Rational
-          Fiction</a
-        >
-      </li>
     </ul>
+
+    <Books />
   </div>
 </BaseLayout>

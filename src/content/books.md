@@ -1,20 +1,14 @@
----
-title: Books
-description: Books reading
-pubDate: '2024-04-23'
-tags: ['books']
----
+## Books
 
-### https://kimmobrunfeldt.github.io/progressbar.js/ rating?
-
-# Books
+Some of the rational fiction I love (inspiration from
+[Goodreads: Rational Fiction](https://www.goodreads.com/list/show/100705.Rational_Fiction)):
 
 - [Harry Potter and the Methods of Rationality](https://hpmor.com/)
   - [Significant Digits](https://www.anarchyishyperbole.com/p/significant-digits.html)
 - [Worm](https://parahumans.wordpress.com/)
 - [Mother of Learning](https://www.royalroad.com/fiction/21220/mother-of-learning)
 
-## Todo
+### Todo
 
 - Ward
 - A Practical Guide to Evil

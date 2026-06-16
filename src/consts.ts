@@ -13,8 +13,8 @@ export const AUTHOR = {
 }
 
 export const NAV_LINKS = [
-  { href: '/', title: 'Home' },
-  { href: '/blog', title: 'Blog' },
+  { href: '/', title: 'Blog' },
+  { href: '/home', title: 'Home' },
   { href: '/projects', title: 'Projects' },
   { href: '/tags', title: 'Tags' },
   { href: '/about', title: 'About' },

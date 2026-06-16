@@ -1,0 +1,133 @@
+---
+---
+
+<button
+  id="search-open"
+  type="button"
+  aria-label="Search"
+  class="flex items-center gap-2 rounded-md px-2 py-1.5 text-sm text-zinc-500 transition-colors hover:bg-zinc-100 hover:text-zinc-900 dark:text-zinc-400 dark:hover:bg-zinc-800 dark:hover:text-zinc-100"
+>
+  <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
+    <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
+  </svg>
+  <kbd class="hidden rounded border border-zinc-300 px-1.5 font-mono text-xs text-zinc-400 sm:inline dark:border-zinc-700">⌘K</kbd>
+</button>
+
+<div id="search-modal" class="fixed inset-0 z-50 hidden">
+  <div id="search-backdrop" class="search-backdrop-anim absolute inset-0 bg-black/50 backdrop-blur-sm"></div>
+  <div
+    class="search-panel-anim relative mx-auto mt-[12vh] max-w-xl rounded-xl border border-zinc-200 bg-white p-4 shadow-2xl dark:border-zinc-800 dark:bg-zinc-900"
+  >
+    <div id="pagefind-search"></div>
+  </div>
+</div>
+
+<style>
+  @keyframes search-fade {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+  @keyframes search-pop {
+    from {
+      opacity: 0;
+      transform: translateY(-10px) scale(0.97);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+  }
+  #search-modal:not(.hidden) .search-backdrop-anim {
+    animation: search-fade 0.15s ease-out;
+  }
+  #search-modal:not(.hidden) .search-panel-anim {
+    animation: search-pop 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    #search-modal:not(.hidden) .search-backdrop-anim,
+    #search-modal:not(.hidden) .search-panel-anim {
+      animation: none;
+    }
+  }
+</style>
+
+<style is:global>
+  :root {
+    --pagefind-ui-scale: 0.9;
+    --pagefind-ui-primary: #059669;
+    --pagefind-ui-text: #27272a;
+    --pagefind-ui-background: transparent;
+    --pagefind-ui-border: #e4e4e7;
+    --pagefind-ui-tag: #f4f4f5;
+    --pagefind-ui-border-width: 1px;
+    --pagefind-ui-border-radius: 8px;
+  }
+  .dark {
+    --pagefind-ui-primary: #34d399;
+    --pagefind-ui-text: #e4e4e7;
+    --pagefind-ui-background: transparent;
+    --pagefind-ui-border: #3f3f46;
+    --pagefind-ui-tag: #27272a;
+  }
+  /* Make the input blend with the panel + emerald focus */
+  .pagefind-ui__search-input {
+    background-color: transparent !important;
+  }
+  .pagefind-ui__search-input:focus {
+    outline: none !important;
+    border-color: var(--pagefind-ui-primary) !important;
+    box-shadow: 0 0 0 2px color-mix(in srgb, var(--pagefind-ui-primary) 30%, transparent) !important;
+  }
+</style>
+
+<script is:inline>
+  ;(function () {
+    const openBtn = document.getElementById('search-open')
+    const modal = document.getElementById('search-modal')
+    const backdrop = document.getElementById('search-backdrop')
+    if (!openBtn || !modal) return
+    let loaded = false
+
+    function loadPagefind() {
+      if (loaded) return
+      loaded = true
+      const css = document.createElement('link')
+      css.rel = 'stylesheet'
+      css.href = '/pagefind/pagefind-ui.css'
+      document.head.appendChild(css)
+      const s = document.createElement('script')
+      s.src = '/pagefind/pagefind-ui.js'
+      s.onload = function () {
+        // eslint-disable-next-line no-undef
+        new PagefindUI({ element: '#pagefind-search', showSubResults: true, showImages: false })
+      }
+      document.body.appendChild(s)
+    }
+
+    function open() {
+      modal.classList.remove('hidden')
+      loadPagefind()
+      setTimeout(function () {
+        const input = modal.querySelector('input')
+        if (input) input.focus()
+      }, 120)
+    }
+    function close() {
+      modal.classList.add('hidden')
+    }
+
+    openBtn.addEventListener('click', open)
+    if (backdrop) backdrop.addEventListener('click', close)
+    document.addEventListener('keydown', function (e) {
+      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') {
+        e.preventDefault()
+        modal.classList.contains('hidden') ? open() : close()
+      }
+      if (e.key === 'Escape') close()
+    })
+  })()
+</script>
