@@ -23,7 +23,7 @@
  *   - the relation keys in REL (depend on how your "Post" type is set up)
  */
 
-import { existsSync, readdirSync } from "node:fs";
+import { existsSync, readdirSync, readFileSync } from "node:fs";
 import { mkdir, unlink, writeFile } from "node:fs/promises";
 import { join } from "node:path";
 
@@ -45,6 +45,19 @@ const CLOUD_NAME = process.env.CLOUDINARY_CLOUD_NAME;
 const UPLOAD_PRESET = process.env.CLOUDINARY_UPLOAD_PRESET;
 
 const OUT_DIR = join("src", "content", "blog");
+
+// Image dedup cache: maps an Anytype content-id (the `bafyrei…` last path
+// segment, stable per image content) -> its Cloudinary URL. Committed to the
+// repo so re-syncs reuse already-uploaded images instead of re-uploading.
+const IMAGE_CACHE_FILE = join("scripts", ".image-cache.json");
+let imageCache: Record<string, string> = {};
+try {
+  if (existsSync(IMAGE_CACHE_FILE))
+    imageCache = JSON.parse(readFileSync(IMAGE_CACHE_FILE, "utf8"));
+} catch {
+  imageCache = {};
+}
+let imageCacheDirty = false;
 
 // Map your Anytype "Post" relation keys -> post frontmatter.
 // `name` is the built-in object title; the rest are relations you create.
@@ -203,10 +216,23 @@ async function rehostImages(md: string): Promise<string> {
   const matches = [...md.matchAll(imgRe)];
   for (const m of matches) {
     const [, , url] = m;
-    // Already remote (e.g. existing Cloudinary) — leave it.
-    if (/^https?:\/\//i.test(url) && !url.startsWith(API_URL)) continue;
+    // Local Anytype image? It serves media from a gateway port (e.g. :47800),
+    // which differs from the API port — so match any localhost host, any port.
+    // Relative paths (no scheme) are local too. Anything else is already remote.
+    const isRemote = /^https?:\/\//i.test(url);
+    const isLocal =
+      !isRemote || /^https?:\/\/(127\.0\.0\.1|localhost)(:\d+)?\//i.test(url);
+    if (!isLocal) continue;
+    // Content-id = last path segment (Anytype's `bafyrei…`). Stable per image,
+    // so we can skip re-fetch/re-upload if we've already done this one.
+    const cid = url.split("/").pop()?.split("?")[0] || url;
+    if (imageCache[cid]) {
+      md = md.replace(`](${url})`, `](${imageCache[cid]})`);
+      console.log(`  = image ${cid} -> cached`);
+      continue;
+    }
     try {
-      const fetchUrl = url.startsWith("http")
+      const fetchUrl = isRemote
         ? url
         : `${API_URL}/${url.replace(/^\.?\//, "")}`;
       const r = await fetch(fetchUrl, {
@@ -224,6 +250,10 @@ async function rehostImages(md: string): Promise<string> {
         ? `<dry-run cloudinary url for ${name}>`
         : await uploadToCloudinary(bytes, name);
       md = md.replace(`](${url})`, `](${secure})`);
+      if (!DRY) {
+        imageCache[cid] = secure;
+        imageCacheDirty = true;
+      }
       console.log(`  ↑ image ${name} -> ${DRY ? "(dry)" : secure}`);
     } catch (e) {
       console.warn(`  ! image error for ${url}: ${(e as Error).message}`);
@@ -324,6 +354,11 @@ async function main() {
       await unlink(join(OUT_DIR, f));
       console.log(`✗ deleted ${f} (not in Anytype)`);
     }
+  }
+
+  if (imageCacheDirty && !DRY) {
+    await writeFile(IMAGE_CACHE_FILE, JSON.stringify(imageCache, null, 2) + "\n", "utf8");
+    console.log(`✓ updated ${IMAGE_CACHE_FILE}`);
   }
 
   console.log("Done.");
