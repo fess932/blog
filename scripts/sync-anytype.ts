@@ -3,8 +3,9 @@
 /**
  * Sync posts from Anytype (local API) into src/content/blog as Markdown.
  *
- *   bun run sync:anytype          # write/update md files
+ *   bun run sync:anytype          # write/update md files, then commit + push
  *   bun run sync:anytype --dry    # print what would happen, write nothing
+ *   bun run sync:anytype --no-git # write files but skip the commit + push step
  *
  * The Anytype API is LOCAL: the desktop app must be running on this machine.
  * That is why this is a sync step (run on your machine, commit the md) rather
@@ -23,12 +24,14 @@
  *   - the relation keys in REL (depend on how your "Post" type is set up)
  */
 
+import { execFileSync } from "node:child_process";
 import { existsSync, readdirSync, readFileSync } from "node:fs";
 import { mkdir, unlink, writeFile } from "node:fs/promises";
 import { join } from "node:path";
 
 // ---------------------------------------------------------------- config
 const DRY = process.argv.includes("--dry");
+const NO_GIT = process.argv.includes("--no-git"); // skip the commit+push step
 
 const API_URL = process.env.ANYTYPE_API_URL ?? "http://127.0.0.1:31009";
 const API_VERSION = process.env.ANYTYPE_API_VERSION ?? "2025-11-08";
@@ -361,7 +364,38 @@ async function main() {
     console.log(`✓ updated ${IMAGE_CACHE_FILE}`);
   }
 
+  if (!DRY && !NO_GIT) gitCommitAndPush();
+
   console.log("Done.");
+}
+
+// Commit only the paths the sync touches (blog content + image cache) and push.
+// Skipped in --dry; disable with --no-git.
+function gitCommitAndPush(): void {
+  const git = (...args: string[]) =>
+    execFileSync("git", args, { encoding: "utf8" }).trim();
+  try {
+    const paths = [OUT_DIR, IMAGE_CACHE_FILE];
+    git("add", "--", ...paths);
+    // Anything staged among our paths?
+    const staged = execFileSync(
+      "git",
+      ["diff", "--cached", "--name-only", "--", ...paths],
+      { encoding: "utf8" },
+    ).trim();
+    if (!staged) {
+      console.log("• git: no content changes to commit");
+      return;
+    }
+    const stamp = new Date().toISOString().slice(0, 16).replace("T", " ");
+    git("commit", "-m", `content: sync from Anytype (${stamp})`);
+    console.log("✓ git: committed");
+    git("push");
+    console.log("✓ git: pushed");
+  } catch (e) {
+    console.warn(`! git step failed: ${(e as Error).message}`);
+    console.warn("  (files are saved; commit/push manually)");
+  }
 }
 
 main().catch((e) => {
