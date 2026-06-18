@@ -35,7 +35,6 @@ Some of the rational fiction I love (inspiration from
 - [ ] Defiance of the Fall
 - [ ] He Who Fights with Monsters
 - [ ] Shadow Slave
-- [ ] Lord of the Mysteries
 - [ ] Reverend Insanity
 - [ ] Super Supportive
 - [ ] The Perfect Run
