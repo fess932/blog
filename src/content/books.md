@@ -20,3 +20,29 @@ Some of the rational fiction I love (inspiration from
 - [ ] Pale
 - [ ] Twig
 - [ ] The Final Empire
+
+#### Not approved
+
+- [ ] The Dresden Files
+- [ ] Cradle
+- [ ] The First Law
+- [ ] The Kingkiller Chronicle
+- [ ] The Lightbringer Series
+- [ ] Super Powereds
+- [ ] Arcane Ascension
+- [ ] Sufficiently Advanced Magic
+- [ ] Metaworld Chronicles
+- [ ] Defiance of the Fall
+- [ ] He Who Fights with Monsters
+- [ ] Shadow Slave
+- [ ] Lord of the Mysteries
+- [ ] Reverend Insanity
+- [ ] Super Supportive
+- [ ] The Perfect Run
+- [ ] Mage Errant
+- [ ] The Licanius Trilogy
+- [ ] The Black Company
+- [ ] The Maleficent Seven
+- [ ] The Red Rising Saga
+- [ ] The Book of the New Sun
+- [ ] The Culture Series
